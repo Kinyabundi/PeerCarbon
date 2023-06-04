@@ -1,8 +1,6 @@
 import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
 import React, { useState } from 'react'
 import { IconType } from 'react-icons';
-import { AiFillCheckCircle } from 'react-icons/ai'
-import { VscDebugStart } from 'react-icons/vsc'
 import PlanList from './PlanList';
 
 interface SubscriptionCardProps {
