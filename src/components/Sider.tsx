@@ -47,7 +47,8 @@ export default function Sider() {
           <SideItem Icon={HiOutlineStar} text="Fleet" />
           <SideItem Icon={HiOutlineUser} text="Users" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Offsets" />
-          <SideItem Icon={LuPlug} text="Subscription" />
+          <SideItem Icon={HiOutlineCurrencyDollar} text="Subscriptions" />
+          <SideItem Icon={LuPlug} text="Integration" />
         </ul>
       </nav>
       <hr className="h-[1px] border-t-0 bg-neutral-300 opacity-100 mx-2 mt-20" />
