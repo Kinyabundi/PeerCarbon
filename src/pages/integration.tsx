@@ -34,11 +34,56 @@ const Integration: NextPageWithLayout = () => {
         </button>
        
       </div>
-      <div className='mt-8'>
+      <div className='mt-8 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
         <ApiCard 
           image='/images/ola.jpeg'
           title='OLA Africa'
           description="Connect to OLA Africa's fuel cards accounts through our API endpoints for fueling transaction data"
+        />
+        <ApiCard 
+          image='/images/hashi.png'
+          title='Hashi Energy'
+          description="Connect to Hashi Energy fuel cards accounts through our API endpoints for fueling transaction data"
+        />
+        <ApiCard 
+          image='/images/hass.jpeg'
+          title='Hass Energy'
+          description="Connect to Hass Energy fuel cards accounts through our API endpoints for fueling transaction data"
+        />
+      </div>
+      <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
+        <ApiCard 
+          image='/images/telematics.png'
+          title='Telematics Africa' 
+          description="Connect to Telematics Africa accounts through our API endpoints for fueling transaction data"
+        />
+        <ApiCard 
+          image='/images/Tramigo.png'
+          title='Tramigo'
+          description="Connect to Tramigo accounts through our API endpoints for fueling transaction data"
+        />
+        <ApiCard 
+          image='/images/Emdee.png'
+          title='Emdee Telematics'
+          description="Connect to 
+          Emdee Telematics accounts through our API endpoints for fueling transaction data"
+        />
+      </div>
+      <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
+        <ApiCard 
+          image='/images/TotalEnergies.png'
+          title='Total Energies'
+          description="Connect to Total fuel cards accounts through our API endpoints for fueling transaction data"
+        />
+        <ApiCard 
+          image='/images/AFMS.jpeg'
+          title='Africa Fleet MS'
+          description="Connect to OLA Africa's fuel cards accounts through our API endpoints for fueling transaction data"
+        />
+        <ApiCard 
+          image='/images/Rubis.webp'
+          title='Rubis'
+          description="Connect to Rubis fuel cards accounts through our API endpoints for fueling transaction data"
         />
       </div>
     </div>
