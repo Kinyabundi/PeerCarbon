@@ -1,50 +1,32 @@
-import { Icon } from 'next/dist/lib/metadata/types/metadata-types';
-import React, { useState } from 'react'
+
+import  { useState } from 'react'
 import { IconType } from 'react-icons';
 import PlanList from './PlanList';
+import { FC } from 'react';
 
 interface SubscriptionCardProps {
     title: string;
     description: string;
     price: string;
-    icon: IconType;
+    Icon: IconType;
     planList?: any;
 }
 
 
-const SubscriptionCard = ({ title, description, price, icon, planList }: SubscriptionCardProps) => {
-    const [isHovered, setIsHovered] = useState(false);
-
-    const handleMouseEnter = () => {
-        setIsHovered(true);
-    }
-
-    const handleMouseLeave = () => {
-        setIsHovered(false);
-    }
-
-    const titleColor = isHovered ? '#1476ff' : 'black';
-    const transformValue = isHovered ? 'scale(1.05)' : 'scale(1)';
-    const transitionDuration = '0.3s';
-
+const SubscriptionCard: FC<SubscriptionCardProps> = ({ title, description, price, Icon, planList }) => {
+     const [isHovered, setIsHovered] = useState<boolean>(false)
     return (
-
-        <div className="w-[320px] bg-white rounded-[50px] px-8 py-8"
-            onMouseEnter={handleMouseEnter}
-            onMouseLeave={handleMouseLeave}
-            style={{
-                transform: transformValue,
-                transition: `transform ${transitionDuration} ease-in-out`,
-            }}
+        <div className={`w-[320px] bg-white rounded-[20px] px-8 py-8 mb-4 hover:shadow-lg transform transition duration-500 ease-in-out hover:-translate-y-1 hover:scale-110`}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
             <div className="flex justify-between items-center">
                 <div className='flex justify-center items-center bg-blue-50  mt-6 w-16 h-16 rounded-xl'>
-                    {React.createElement(icon, { className: 'text-[#1476ff] h-20 w-20' })}
-                    {/* <VscDebugStart className='text-[#1476ff]' size={60} /> */}
+                    <Icon className='text-[#1476ff]' size={60} />
                 </div>
             </div>
-            <div className='mt-6 '>
-                <h2 className='text-xl text-gray-900 font-bold' style={{ color: titleColor }}>
+            <div className='mt-6'>
+                <h2 className={`text-xl font-bold  ${isHovered ? 'text-[#1476ff]' : 'text-gray-900'}`}>
                     {title}
                 </h2>
                 <div className='mt-4'>

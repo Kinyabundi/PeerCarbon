@@ -9,8 +9,7 @@ interface ImageObject {
   }
   
   interface ProjectCardProps {
-    icon: IconType | string;
-    more: IconType;
+    Icon: IconType | string;
     projectName: string;
     description: string;
     projectType: string;
@@ -18,8 +17,7 @@ interface ImageObject {
     images: ImageObject[];
   }
   const ProjectCard: React.FC<ProjectCardProps> = ({
-    icon,
-    more,
+    Icon,
     projectName,
     description,
     projectType,
@@ -34,8 +32,8 @@ interface ImageObject {
 
     <div className="min-h-[17rem] min-w-[330px] bg-white rounded-[50px] px-8 py-6">
       <div className="flex justify-between items-center mt-8">
-      {React.createElement(icon, { className: 'w-8 h-8 ml-3 text-blue-600' })}
-      {React.createElement(more, { className: 'w-8 h-8 ml-3 text-gray-600' })}
+     <Icon className = 'w-8 h-8 ml-3 text-blue-600'/>
+     <Icon className = 'w-8 h-8 ml-3 text-gray-600'/>
       </div>
       <div className='mt-8'>
         <h2 className='text-md text-gray-900 font-semibold'>{projectName}</h2>

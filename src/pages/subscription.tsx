@@ -4,9 +4,10 @@ import { NextPageWithLayout } from '@/types/Layout'
 import React, {useState} from 'react'
 import { CiPlane } from 'react-icons/ci'
 import { VscDebugStart } from 'react-icons/vsc'
-import { GiJetFighter } from 'react-icons/gi'
+
 const Subscription: NextPageWithLayout = () => {
-    const [isBilledAnnually, setIsBilledAnnually] = useState(false)
+
+    const [isBilledAnnually, setIsBilledAnnually] = useState<boolean>(false)
 
     const handleToggleBilling = () => {
       setIsBilledAnnually(!isBilledAnnually)
@@ -33,7 +34,7 @@ const Subscription: NextPageWithLayout = () => {
 
             <div className='mt-12 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
                 <SubscriptionCard 
-                icon={VscDebugStart}
+                Icon={VscDebugStart}
                 title='Startup'
                 description='Entry level software with basic features and integrations'
                 price={isBilledAnnually ? '$19' : '$20'}
@@ -45,7 +46,7 @@ const Subscription: NextPageWithLayout = () => {
                 ]}
                 />
                 <SubscriptionCard 
-                icon={CiPlane}
+                Icon={CiPlane}
                 title='Professional'
                 description='Solution for companies with a larger fleet and footprint'
                 price={isBilledAnnually ? '$29' : '$299'}
@@ -59,7 +60,7 @@ const Subscription: NextPageWithLayout = () => {
                 ]}
                 />
                 <SubscriptionCard 
-                icon={CiPlane}
+                Icon={CiPlane}
                 title='Enterprise'
                 description='Custom solutions with top emissions management'
                 price={isBilledAnnually ? '$39' : '$999'}
