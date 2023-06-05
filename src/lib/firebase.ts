@@ -1,22 +1,19 @@
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore'
-import { getStorage } from 'firebase/storage'
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { FirebaseOptions, getApp, initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+import { firebaseConfig } from "../../env";
 
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyD5UGDHdAB69QDSqvJNc3xgdWLFkCypZNQ",
-  authDomain: "peercarbon.firebaseapp.com",
-  projectId: "peercarbon",
-  storageBucket: "peercarbon.appspot.com",
-  messagingSenderId: "967768035372",
-  appId: "1:967768035372:web:fbfb751dfceb570f708189"
-};
+function createFirebaseApp(config: FirebaseOptions) {
+  try {
+    return getApp();
+  } catch {
+    return initializeApp(config);
+  }
+}
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app)
-const storage = getStorage()
-export { app, db, storage}
+export const firebaseApp = createFirebaseApp(firebaseConfig);
+export const firebaseFirestore = getFirestore(firebaseApp);
+export const firebaseAuth = getAuth(firebaseApp);
+export const firebaseStorage = getStorage();
+

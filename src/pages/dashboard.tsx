@@ -71,11 +71,9 @@ const recentIntegrations: RecentIntegrationItemProps[] = [
 ];
 
 const Dashboard: NextPageWithLayout = () => {
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   return (
     <>
-      <OffsetModal open={modalOpen} setOpen={setModalOpen} />
       <div className="px-4 sm:px-6 md:px-8 lg:pl-80 bg-[#f7f9fc] min-h-[100vh] pt-12 pr-3">
         <div className="flex items-baseline justify-between">
           <div>
@@ -84,7 +82,6 @@ const Dashboard: NextPageWithLayout = () => {
           </div>
           <button
             type="button"
-            onClick={() => setModalOpen(true)}
             className="py-4 px-4 inline-flex justify-center items-center gap-2 rounded-full border border-transparent font-semibold bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
           >
             <AiOutlinePlus className="w-5 h-5" />
