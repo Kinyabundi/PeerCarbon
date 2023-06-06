@@ -7,18 +7,25 @@ import {
   HiOutlineUser,
 } from "react-icons/hi";
 
+
 interface SideItemProps {
   Icon: IconType;
   text: string;
+  
 }
 
-const SideItem = ({ Icon, text }: SideItemProps) => {
+const SideItem = ({ Icon, text}: SideItemProps) => {
+ 
+
   return (
     <li>
-      <a className="flex items-center gap-x-2.5 py-2 px-2.5 text-sm text-slate-700 rounded-md cursor-pointer hover:text-blue-600">
+      <a
+        className='flex items-center gap-x-2.5 py-2 px-2.5 text-sm text-slate-700 rounded-md cursor-pointer hover:text-blue-600'>
         <Icon className="w-7 h-7" />
         <span className="text-md font-medium">{text}</span>
+       
       </a>
+     
     </li>
   );
 };
@@ -44,7 +51,8 @@ export default function Sider() {
       >
         <ul className="space-y-5">
           <SideItem Icon={HiOutlineHome} text="Dashboard" />
-          <SideItem Icon={HiOutlineStar} text="Fleet" />
+          <SideItem Icon={HiOutlineStar} text="Fleet"
+            />
           <SideItem Icon={HiOutlineUser} text="Users" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Offsets" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Subscriptions" />

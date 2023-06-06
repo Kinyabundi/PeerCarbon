@@ -1,11 +1,9 @@
 import MainLayout from '@/layouts/MainLayout';
 import { NextPageWithLayout } from '@/types/Layout'
-import React from 'react'
 import 'react-datepicker/dist/react-datepicker.css';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Toaster, toast } from 'react-hot-toast';
+import axios from 'axios';
 
 
 const AddVehicle: NextPageWithLayout = () => {
@@ -27,41 +25,34 @@ const AddVehicle: NextPageWithLayout = () => {
     setFuelType('');
     setDate('');
   };
-  
-  const handleSubmit = async (event: { preventDefault: () => void; target: any; }) => {
-    event.preventDefault();
-  
-    const vehicleData = {
-      vehicleModel,
-      type,
-      region,
-      registrationNumber,
-      engineCapacity,
-      fuelType,
-      date,
+
+  useEffect(() => {
+    fetchVehicleModels();
+  }, []);
+
+  const fetchVehicleModels = async () => {
+    const options = {
+      method: 'GET',
+      url: 'https://carbonsutra1.p.rapidapi.com/vehicle_makes',
+      headers: {
+        'X-RapidAPI-Key': '538126673fmsh53c90aa3149fc0ap167699jsna536e221fdff',
+        'X-RapidAPI-Host': 'carbonsutra1.p.rapidapi.com',
+      },
     };
-    console.log(vehicleData);
-    setIsLoading(true);
-  
     try {
-      // Save the vehicle information to Firestore
-      await addDoc(collection(db, 'vehicles'), vehicleData);
-  
-      console.log('Vehicle information saved successfully!');
-      toast.success('Vehicle information saved successfully!');
+      const response = await axios.request(options);
+      console.log(response.data.data[0].make);
+      const makes = response.data.data.map((vehicle: any) => vehicle.make);
+      console.log(makes);
+      setVehicleModel(makes);
     } catch (error) {
-      console.error('Error saving vehicle information:', error);
-      toast.error('Error saving vehicle information!');
-    }
-    finally {
-      setIsLoading(false);
-      resetForm();
+      console.error(error);
     }
   };
   
   return (
     <div className='px-4 sm:px-6 md:px-8 lg:pl-80 bg-[#f7f9fc] min-h-[100vh] pt-12'>
-      <form onSubmit={handleSubmit}>
+      <form >
 
         <div>
           <h1 className="text-center mb-2 text-3xl text-gray-900 font-bold">Vehicle</h1>
@@ -70,7 +61,15 @@ const AddVehicle: NextPageWithLayout = () => {
         <div className="grid gap-6 mb-6 md:grid-cols-2">
           <div>
             <label htmlFor="first_name" className="block mb-2 text-md font-medium text-gray-900 ">Vehicle Model:</label>
-            <input type="text"  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Honda" value={vehicleModel} onChange={(e) => setVehicleModel(e.target.value)} required />
+            <select  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Honda" value={vehicleModel} onChange={(e) => setVehicleModel(e.target.value)} required >
+
+            <option value="">Select Model</option>
+              {Array.isArray(vehicleModel) && vehicleModel.length > 0 &&vehicleModel.map(({model}: any) => (
+                <option  value={model}>
+                  {model}
+                </option>
+              ))}
+              </select>
           </div>
           <div>
             <label htmlFor="last_name" className="block mb-2 text-md font-medium text-gray-900 ">Type:</label>
