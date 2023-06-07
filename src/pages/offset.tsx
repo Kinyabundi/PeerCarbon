@@ -22,8 +22,8 @@ const Offset: NextPageWithLayout = () => {
       </div>
       <div className= 'grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
         <ProjectCard
-          icon={TbDropletOff}
-          more={CiSquareMore}
+          Icon={TbDropletOff}
+          Icon={CiSquareIcon}
           projectName="Octavia Carbon"
           description="Octavia builds and deploys Direct Air Carbon Capture machines in Kenya."
           projectType="DACC"
@@ -31,8 +31,8 @@ const Offset: NextPageWithLayout = () => {
           images={images}
         />
         <ProjectCard
-          icon={TbDropletOff}
-          more={CiSquareMore}
+          Icon={TbDropletOff}
+          Icon={CiSquareIcon}
           projectName="Mikoko Mangrove"
           description="An initiative in the Gazi and Makongeni areas of the South Coast of Kenya."
           projectType="Blue Carbon"
@@ -40,8 +40,8 @@ const Offset: NextPageWithLayout = () => {
           images={images}
         />
         <ProjectCard
-          icon={TbDropletOff}
-          more={CiSquareMore}
+          Icon={TbDropletOff}
+          Icon={CiSquareMore}
           projectName="Clean Cooking Alliance"
           description="Supports access to clean cooking systems in Africa, especially Kenya."
           projectType="Clean Fuels"

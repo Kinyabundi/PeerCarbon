@@ -1,12 +1,12 @@
 export interface IUser {
     id?: string;
-    name: string
+    companyName: string
     email: string
-    corporateNo: string
+    corporateNo?: string
     location: string
     logo?: string | ArrayBuffer | null
     banner?: string
-    description: string
+    companyDescription: string
     website?: string
     phoneNo?: string | string[]
 }

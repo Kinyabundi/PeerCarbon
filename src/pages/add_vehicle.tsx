@@ -6,9 +6,10 @@ import { Toaster, toast } from "react-hot-toast";
 import axios, { AxiosRequestConfig } from "axios";
 
 const AddVehicle: NextPageWithLayout = () => {
-  const [vehicleModel, setVehicleModel] = useState<string>("");
+  const [vehicleMakes, setvehicleMakes] = useState<string>("");
+  const [makes, setMakes] = useState<string[]>([]);
+  const [type, setType] = useState<string>("");
   const [models, setModels] = useState<string[]>([]);
-  const [type, setType] = useState("");
   const [region, setRegion] = useState("");
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [engineCapacity, setEngineCapacity] = useState("");
@@ -17,7 +18,7 @@ const AddVehicle: NextPageWithLayout = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const resetForm = () => {
-    setVehicleModel("");
+    setvehicleMakes("");
     setType("");
     setRegion("");
     setRegistrationNumber("");
@@ -26,7 +27,7 @@ const AddVehicle: NextPageWithLayout = () => {
     setDate("");
   };
 
-  const fetchVehicleModels = async () => {
+  const fetchVehicleMakes = async () => {
     const options = {
       method: "GET",
       url: "https://carbonsutra1.p.rapidapi.com/vehicle_makes",
@@ -39,7 +40,7 @@ const AddVehicle: NextPageWithLayout = () => {
       const response = await axios.request(options);
 
       if (response.status === 200) {
-        setModels(response.data.data.map((model: any) => model.make));
+        setMakes(response.data.data.map((make: any) => make.make));
       }
     } catch (error) {
       console.error(error);
@@ -47,8 +48,44 @@ const AddVehicle: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    fetchVehicleModels();
+    fetchVehicleMakes();
   }, []);
+
+
+  const fetchvehicleModels = async () => {
+    if (!vehicleMakes){
+    console.log("no make");
+    setModels([]);
+      return;
+    }
+
+    console.log(vehicleMakes);
+    const url = `https://carbonsutra1.p.rapidapi.com/vehicle_makes/${vehicleMakes}/vehicle_models`;
+
+    const options = {
+      method: "GET",
+      url: url,
+      headers: {
+        "X-RapidAPI-Key": "538126673fmsh53c90aa3149fc0ap167699jsna536e221fdff",
+        "X-RapidAPI-Host": "carbonsutra1.p.rapidapi.com",
+      },
+    } as AxiosRequestConfig;
+    try {
+      const response = await axios.request(options);
+      console.log(response.data.data);
+  
+      if (response.status === 200) {
+        setModels(response.data.data.map((model: any) => model.model));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  useEffect(() => {
+    fetchvehicleModels();
+  }, [vehicleMakes]);
 
   return (
     <div className="px-4 sm:px-6 md:px-8 lg:pl-80 bg-[#f7f9fc] min-h-[100vh] pt-12">
@@ -72,14 +109,18 @@ const AddVehicle: NextPageWithLayout = () => {
             <select
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
               placeholder="Honda"
-              value={vehicleModel}
-              onChange={(e) => setVehicleModel(e.target.value)}
+              value={vehicleMakes}
+              onChange={(e) => {
+                setvehicleMakes(e.target.value)
+                fetchvehicleModels();
+              }
+              }
               required
             >
               <option value="">Select Model</option>
-              {models.map((model, i) => (
-                <option key={i} value={model}>
-                  {model}
+              {makes.map((make, i) => (
+                <option key={i} value={make}>
+                  {make}
                 </option>
               ))}
             </select>
@@ -91,14 +132,20 @@ const AddVehicle: NextPageWithLayout = () => {
             >
               Type:
             </label>
-            <input
-              type="text"
+            <select
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              placeholder="Audi"
+              placeholder="A3"
               value={type}
               onChange={(e) => setType(e.target.value)}
               required
-            />
+            >
+              <option value="">Select Type</option>
+              {models.map((model, i) => (
+                <option key={i} value={model}>
+                  {model}
+                </option>
+              ))}
+            </select>
           </div>
           <div>
             <label

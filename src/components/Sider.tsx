@@ -20,6 +20,7 @@ const SideItem = ({ Icon, text}: SideItemProps) => {
   return (
     <li>
       <a
+        href={`${text.toLowerCase()}`}
         className='flex items-center gap-x-2.5 py-2 px-2.5 text-sm text-slate-700 rounded-md cursor-pointer hover:text-blue-600'>
         <Icon className="w-7 h-7" />
         <span className="text-md font-medium">{text}</span>
@@ -54,8 +55,8 @@ export default function Sider() {
           <SideItem Icon={HiOutlineStar} text="Fleet"
             />
           <SideItem Icon={HiOutlineUser} text="Users" />
-          <SideItem Icon={HiOutlineCurrencyDollar} text="Offsets" />
-          <SideItem Icon={HiOutlineCurrencyDollar} text="Subscriptions" />
+          <SideItem Icon={HiOutlineCurrencyDollar} text="Offset" />
+          <SideItem Icon={HiOutlineCurrencyDollar} text="Subscription" />
           <SideItem Icon={LuPlug} text="Integration" />
         </ul>
       </nav>
