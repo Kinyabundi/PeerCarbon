@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, RefObject } from "react";
 import { IconType } from "react-icons";
 
 interface FormControlProps {
@@ -15,6 +15,11 @@ interface FormControlProps {
 interface UploadBtnProps {
   labelText: string;
   btnText?: string;
+  isDisabled?: boolean;
+  accept?: "image/png" | "image/jpeg" | "image/jpg";
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  pickerRef?: RefObject<HTMLInputElement>;
+  value?: string | ArrayBuffer | null;
 }
 
 interface FormIconBtnProps {
@@ -69,15 +74,25 @@ export default function FormControl({
   );
 }
 
-export const UploadBtn = ({ labelText, btnText }: UploadBtnProps) => {
+export const UploadBtn = ({
+  labelText,
+  btnText,
+  isDisabled = false,
+  pickerRef,
+  value,
+  onChange,
+  accept,
+}: UploadBtnProps) => {
   return (
     <div className="my-3">
       <label className="block text-sm font-medium text-gray-900">
         {labelText}
       </label>
-      <label
-        htmlFor="dropzone-file"
-        className="flex items-center px-3 py-3 mx-auto mt-2 text-center bg-white border-2 border-dashed rounded-lg cursor-pointer"
+      <button
+        onClick={() => pickerRef?.current?.click()}
+        disabled={isDisabled}
+        type="button"
+        className="flex items-center px-3 py-3 mx-auto mt-2 text-center bg-white border-2 border-dashed rounded-lg cursor-pointer w-full"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -93,11 +108,15 @@ export const UploadBtn = ({ labelText, btnText }: UploadBtnProps) => {
             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
           />
         </svg>
-
         <h2 className="mx-3 text-gray-400">{btnText}</h2>
-
-        <input id="dropzone-file" type="file" className="hidden" />
-      </label>
+      </button>
+      <input
+        type="file"
+        className="hidden"
+        ref={pickerRef}
+        accept={accept}
+        onChange={onChange}
+      />
     </div>
   );
 };

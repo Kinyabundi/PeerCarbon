@@ -3,8 +3,7 @@ export interface IUser {
     name: string
     email: string
     corporateNo: string
-    location: string
-    logo?: string | ArrayBuffer | null
+    logo: string | ArrayBuffer | null
     banner?: string
     description: string
     website?: string

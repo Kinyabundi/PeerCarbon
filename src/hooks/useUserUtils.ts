@@ -6,14 +6,14 @@ import {
 import { FirebaseCollections } from "@/types/Collections";
 import { IUser } from "@/types/User";
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
 import {
-  getDownloadURL,
-  ref,
-  uploadBytes,
-  uploadString,
-} from "firebase/storage";
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { getDownloadURL, ref, uploadString } from "firebase/storage";
+import { useCallback } from "react";
 
 const useUserUtils = () => {
   const createUser = async (userDetails: IUser, password: string) => {
@@ -55,8 +55,24 @@ const useUserUtils = () => {
       });
   };
 
+  const signIn = useCallback(async (email: string, password: string) => {
+    await signInWithEmailAndPassword(firebaseAuth, email, password)
+      .then((userCred) => {
+        return userCred.user;
+      })
+      .catch((e) => {
+        throw e as FirebaseError;
+      });
+  }, []);
+
+  const logout = useCallback(async () => {
+    await signOut(firebaseAuth);
+  }, []);
+
   return {
     createUser,
+    signIn,
+    logout,
   };
 };
 
