@@ -3,6 +3,7 @@ import { AppPropsWithLayout } from "@/types/Layout";
 import { Inter, Poppins } from "next/font/google";
 import Head from "next/head";
 import { useEffect } from "react";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   weight: ["200", "300", "400", "500", "600", "700"],
@@ -31,6 +32,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         </style>
       </Head>
       {getLayout(<Component {...pageProps} />)}
+      <Toaster />
     </main>
   );
 }
