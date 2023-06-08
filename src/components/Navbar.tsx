@@ -10,6 +10,12 @@ import { VscBellDot } from "react-icons/vsc";
 import { SlSettings } from "react-icons/sl";
 import { LuBell, LuInfo } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
+import { useAuthStore } from "@/hooks/useAuthStore";
+import useUserUtils from "@/hooks/useUserUtils";
+import { useRouter } from "next/router";
+
+const PLACEHOLDER_IMG =
+  "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80";
 
 interface IconBtnProps {
   Icon: IconType;
@@ -51,6 +57,9 @@ const IconText = ({ Icon, text, isLogout = false }: IconTextProps) => {
 };
 
 export default function Navbar() {
+  const { user } = useAuthStore();
+  const { logout } = useUserUtils();
+  const router = useRouter();
   return (
     <header className="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-white border-b text-sm py-2.5 sm:py-4 lg:pl-64 ">
       <nav
@@ -87,16 +96,13 @@ export default function Navbar() {
                   <div className="flex items-center">
                     <img
                       className="inline-block flex-shrink-0 h-10 w-10 rounded-full"
-                      src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                      alt="Image Description"
+                      src={user ? (user?.logo as string) : PLACEHOLDER_IMG}
                     />
                     <div className="ml-3 flex flex-col items-start">
                       <h3 className=" text-gray-800 hover:text-blue-600">
-                        Maria Wanner
+                        {user ? user?.name : "User"}
                       </h3>
-                      <p className="text-xs text-gray-400">
-                       Account settings
-                      </p>
+                      <p className="text-xs text-gray-400">Account settings</p>
                     </div>
                   </div>
                 </div>
@@ -130,7 +136,13 @@ export default function Navbar() {
                     <Menu.Item>
                       <IconText Icon={BiSupport} text="Support" />
                     </Menu.Item>
-                    <Menu.Item>
+                    <Menu.Item
+                      as={"button"}
+                      onClick={() => {
+                        logout();
+                        router.push("/login");
+                      }}
+                    >
                       <IconText Icon={HiOutlineLogout} text="Logout" isLogout />
                     </Menu.Item>
                   </div>
