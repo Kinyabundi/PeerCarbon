@@ -1,40 +1,147 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormControl, { UploadBtn } from "@/components/forms/FormControl";
-import { LuLock, LuUser } from "react-icons/lu";
 import useUserUtils from "@/hooks/useUserUtils";
-import {useState} from 'react'
-
+import { IUser } from "@/types/User";
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { LuLock, LuMail, LuPhone, LuUser } from "react-icons/lu";
+import { MdConfirmationNumber } from "react-icons/md";
 
 export default function Register() {
-  const [companyName, setCompanyName] = useState<string>("");
-  const [companyDescription, setCompanyDescription] = useState<string>("");
-  const [companyLogo, setCompanyLogo] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [logo, setLogo] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
-  const [personelName, setPersonelName] = useState<string>("");
-  const [personelRole, setPersonelRole] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
+  const [corporateNo, setCorporateNo] = useState<string>("");
+  const [phoneNo, setPhoneNo] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const logoRef = useRef(null);
+  const router = useRouter();
 
-const { createUser } = useUserUtils();
+  const { createUser } = useUserUtils();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const userDetails = {
-      companyName,
-      companyDescription,
-      companyLogo,
-      email,
-      personelName,
-      personelRole,
-      location,
+  const handleLogoPick = (e: ChangeEvent<HTMLInputElement>) => {
+    // check if there files
+    if (!e?.target?.files?.length) return;
+    const file = e?.target?.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setLogo(reader.result as string);
     };
-    
-    try {
-      await createUser(userDetails, password);
-    } catch (error) {
-      console.error(error);
+  };
+
+  const resetFields = () => {
+    setName("");
+    setDescription("");
+    setLogo("");
+    setEmail("");
+    setCorporateNo("");
+    setPhoneNo("");
+    setPassword("");
+    setConfirmPassword("");
+  };
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    const emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!name) {
+      return toast.error("Company name is required");
     }
+
+    if (!description) {
+      return toast.error("Company description is required");
+    }
+
+    if (!logo) {
+      return toast.error("Company logo is required");
+    }
+
+    if (!corporateNo) {
+      return toast.error("Corporate number is required");
+    }
+
+    if (!phoneNo) {
+      return toast.error("Phone number is required");
+    }
+
+    if (!email) {
+      return toast.error("Email is required");
+    }
+
+    if (!emailRegex.test(email)) {
+      return toast.error("Email is invalid");
+    }
+
+    if (!password) {
+      return toast.error("Password is required");
+    }
+
+    if (password.length < 6) {
+      return toast.error("Password must be at least 6 characters long");
+    }
+
+    if (!confirmPassword) {
+      return toast.error("Confirm password is required");
+    }
+
+    if (password !== confirmPassword) {
+      return toast.error("Passwords do not match");
+    }
+
+    setLoading(true);
+
+    try {
+      const companyDetails: IUser = {
+        name,
+        description,
+        logo,
+        email,
+        phoneNo,
+        corporateNo,
+      };
+
+      await createUser(companyDetails, password);
+
+      resetFields();
+
+      toast("Your account has been created successful", {
+        icon: "👏",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+
+      router.push("/login");
+    } catch (err) {
+      // catch the firebase error codes
+      // @ts-ignore
+      switch (err.code) {
+        case "auth/email-already-in-use":
+          toast.error("Email already in use");
+          break;
+        case "auth/invalid-email":
+          toast.error("Invalid email");
+          break;
+        case "auth/weak-password":
+          toast.error("Weak password");
+          break;
+        default:
+          toast.error("Something went wrong");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="bg-white my-8">
@@ -57,42 +164,69 @@ const { createUser } = useUserUtils();
             labelText="Company Name"
             placeholder="New Energy"
             Icon={LuUser}
-            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
 
           <FormControl
             labelText="Company Description"
             variant="textarea"
             placeholder="Tell us something about your company ..."
-            required
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
 
-          <UploadBtn btnText="Company Logo" labelText="Upload Logo" />
+          {logo ? (
+            <div className="flex items-center mt-6">
+              <img
+                className="object-cover w-10 h-10 rounded-full"
+                src={logo}
+                alt=""
+              />
 
+              <div className="ml-4">
+                <UploadBtn
+                  btnText={logo ? "Change Logo" : "Company Logo"}
+                  labelText="Upload Logo"
+                  pickerRef={logoRef}
+                  onChange={(e) => handleLogoPick(e)}
+                  value={logo}
+                  accept="image/png"
+                />
+              </div>
+            </div>
+          ) : (
+            <UploadBtn
+              btnText={logo ? "Change Logo" : "Company Logo"}
+              labelText="Upload Logo"
+              pickerRef={logoRef}
+              onChange={(e) => handleLogoPick(e)}
+              value={logo}
+            />
+          )}
+
+          <FormControl
+            labelText="Corporate No"
+            placeholder="Company's Corporate No"
+            Icon={MdConfirmationNumber}
+            value={corporateNo}
+            onChange={(e) => setCorporateNo(e.target.value)}
+          />
+          <FormControl
+            labelText="Company Phone No"
+            placeholder="0712345678"
+            Icon={LuPhone}
+            inputType="tel"
+            value={phoneNo}
+            onChange={(e) => setPhoneNo(e.target.value)}
+          />
           <FormControl
             labelText="Email Address"
             placeholder="newenergy@gmail.com"
-            Icon={LuUser}
+            Icon={LuMail}
             inputType="email"
-            required
-          />
-          <FormControl
-            labelText="Personel Name"
-            placeholder="Elizabeth Smith"
-            Icon={LuUser}
-            required
-          />
-          <FormControl
-            labelText="Personel Role"
-            placeholder="Data Analyst"
-            Icon={LuUser}
-            required
-          />
-          <FormControl
-            labelText="Location"
-            placeholder="Nairobi, Kenya"
-            Icon={LuUser}
-            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <FormControl
@@ -100,7 +234,8 @@ const { createUser } = useUserUtils();
             placeholder="********"
             Icon={LuLock}
             inputType="password"
-            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
 
           <FormControl
@@ -108,15 +243,23 @@ const { createUser } = useUserUtils();
             placeholder="********"
             Icon={LuLock}
             inputType="password"
-            required
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
 
           <div className="mt-6">
-            <PrimaryButton text="Create an Account" isWidthFull
-           
+            <PrimaryButton
+              text="Create an Account"
+              isLoading={loading}
+              loadingText="Saving details ..."
+              onClick={onSubmit}
+              isWidthFull
             />
             <div className="mt-6 text-center ">
-              <a href="/login" className="text-sm text-blue-500 hover:underline">
+              <a
+                href="/login"
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Already have an account?
               </a>
             </div>
