@@ -1,5 +1,6 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormControl from "@/components/forms/FormControl";
+import useUserUtils from "@/hooks/useUserUtils";
 import { FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
 import { LuLock, LuUser } from "react-icons/lu";
@@ -8,8 +9,9 @@ export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const { signIn } = useUserUtils();
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     const emailRegex =
@@ -41,14 +43,47 @@ export default function Login() {
       return;
     }
 
-    toast("Login successful", {
-      icon: "👏",
-      style: {
-        borderRadius: "10px",
-        background: "#333",
-        color: "#fff",
-      },
-    });
+    try {
+      const resp = await signIn(email, password);
+
+      console.log(resp);
+
+      //   show success toast
+      toast("Login successful", {
+        icon: "👏",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+    } catch (err) {
+      // @ts-ignore
+      if (err?.code === "auth/user-not-found") {
+        toast("User not found", {
+          icon: "🤔",
+          style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+          },
+        });
+
+        // @ts-ignore
+        if (err?.code === "auth/wrong-password") {
+          toast("Wrong password", {
+            icon: "🤔",
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          });
+        }
+      }
+    } finally {
+      setLoading(false);
+    }
 
     setLoading(false);
   };
