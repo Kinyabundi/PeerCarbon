@@ -100,7 +100,7 @@ export default function Navbar() {
                     />
                     <div className="ml-3 flex flex-col items-start">
                       <h3 className=" text-gray-800 hover:text-blue-600">
-                        {user ? user?.name : "User"}
+                        {user ? user?.companyName : "User"}
                       </h3>
                       <p className="text-xs text-gray-400">Account settings</p>
                     </div>
