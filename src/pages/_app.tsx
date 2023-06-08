@@ -1,3 +1,4 @@
+import AppServices from "@/AppServices";
 import "@/styles/globals.css";
 import { AppPropsWithLayout } from "@/types/Layout";
 import { Inter, Poppins } from "next/font/google";
@@ -31,7 +32,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           `}
         </style>
       </Head>
-      {getLayout(<Component {...pageProps} />)}
+      <AppServices>{getLayout(<Component {...pageProps} />)}</AppServices>
       <Toaster />
     </main>
   );

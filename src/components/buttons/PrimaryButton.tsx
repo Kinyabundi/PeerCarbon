@@ -31,7 +31,7 @@ export default function PrimaryButton({
           aria-label="loading"
         ></span>
       )}
-      {text}
+      {isLoading ? loadingText : text}
     </button>
   );
 }
