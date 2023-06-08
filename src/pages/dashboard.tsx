@@ -6,7 +6,7 @@ import { TbActivityHeartbeat } from "react-icons/tb";
 import { FaGasPump, FaRoad, FaTruck } from "react-icons/fa";
 import { Dialog, Menu, Transition } from "@headlessui/react";
 import { LuArrowUpRight, LuChevronDown, LuArrowDownLeft } from "react-icons/lu";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import DashboardChart from "@/components/DashboardChart";
 import DashboardAreaChart, {
   DashboardAreaChartProps,

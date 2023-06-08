@@ -1,6 +1,7 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormControl from "@/components/forms/FormControl";
 import useUserUtils from "@/hooks/useUserUtils";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
 import { LuLock, LuUser } from "react-icons/lu";
@@ -10,12 +11,24 @@ export default function Login() {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const { signIn } = useUserUtils();
+  const router = useRouter();
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     const emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!email) {
+      toast("Please enter an email address", {
+        icon: "🤔",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      return;
+    }
 
     if (!emailRegex.test(email)) {
       toast("Please enter a valid email address", {
@@ -26,7 +39,6 @@ export default function Login() {
           color: "#fff",
         },
       });
-      setLoading(false);
       return;
     }
 
@@ -39,15 +51,13 @@ export default function Login() {
           color: "#fff",
         },
       });
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
+
     try {
-      const resp = await signIn(email, password);
-
-      console.log(resp);
-
+      await signIn(email, password);
       //   show success toast
       toast("Login successful", {
         icon: "👏",
@@ -57,20 +67,22 @@ export default function Login() {
           color: "#fff",
         },
       });
+      //   redirect to dashboard
+      router.push("/dashboard");
     } catch (err) {
       // @ts-ignore
-      if (err?.code === "auth/user-not-found") {
-        toast("User not found", {
-          icon: "🤔",
-          style: {
-            borderRadius: "10px",
-            background: "#333",
-            color: "#fff",
-          },
-        });
-
-        // @ts-ignore
-        if (err?.code === "auth/wrong-password") {
+      switch (err?.code) {
+        case "auth/user-not-found":
+          toast("User not found", {
+            icon: "🤔",
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          });
+          break;
+        case "auth/wrong-password":
           toast("Wrong password", {
             icon: "🤔",
             style: {
@@ -79,13 +91,21 @@ export default function Login() {
               color: "#fff",
             },
           });
-        }
+          break;
+        default:
+          toast("Something went wrong", {
+            icon: "🤔",
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          });
+          break;
       }
     } finally {
       setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (

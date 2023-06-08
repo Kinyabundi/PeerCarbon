@@ -2,6 +2,7 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormControl, { UploadBtn } from "@/components/forms/FormControl";
 import useUserUtils from "@/hooks/useUserUtils";
 import { IUser } from "@/types/User";
+import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { LuLock, LuMail, LuPhone, LuUser } from "react-icons/lu";
@@ -18,6 +19,7 @@ export default function Register() {
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const logoRef = useRef(null);
+  const router = useRouter();
 
   const { createUser } = useUserUtils();
 
@@ -31,6 +33,17 @@ export default function Register() {
     reader.onloadend = () => {
       setLogo(reader.result as string);
     };
+  };
+
+  const resetFields = () => {
+    setName("");
+    setDescription("");
+    setLogo("");
+    setEmail("");
+    setCorporateNo("");
+    setPhoneNo("");
+    setPassword("");
+    setConfirmPassword("");
   };
 
   const onSubmit = async (e: FormEvent) => {
@@ -97,6 +110,8 @@ export default function Register() {
 
       await createUser(companyDetails, password);
 
+      resetFields();
+
       toast("Your account has been created successful", {
         icon: "👏",
         style: {
@@ -105,6 +120,8 @@ export default function Register() {
           color: "#fff",
         },
       });
+
+      router.push("/login");
     } catch (err) {
       // catch the firebase error codes
       // @ts-ignore
@@ -239,7 +256,10 @@ export default function Register() {
               isWidthFull
             />
             <div className="mt-6 text-center ">
-              <a href="#" className="text-sm text-blue-500 hover:underline">
+              <a
+                href="/login"
+                className="text-sm text-blue-500 hover:underline"
+              >
                 Already have an account?
               </a>
             </div>
