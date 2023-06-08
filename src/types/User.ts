@@ -3,7 +3,7 @@ export interface IUser {
     companyName: string
     email: string
     corporateNo?: string
-    location: string
+    location?: string
     logo?: string | ArrayBuffer | null
     banner?: string
     companyDescription: string

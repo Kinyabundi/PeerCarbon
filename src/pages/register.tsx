@@ -9,8 +9,8 @@ import { LuLock, LuMail, LuPhone, LuUser } from "react-icons/lu";
 import { MdConfirmationNumber } from "react-icons/md";
 
 export default function Register() {
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const [companyName, setCompanyName] = useState<string>("");
+  const [companyDescription, setCompanyDescription] = useState<string>("");
   const [logo, setLogo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>("");
@@ -36,8 +36,8 @@ export default function Register() {
   };
 
   const resetFields = () => {
-    setName("");
-    setDescription("");
+    setCompanyName("");
+    setCompanyDescription("");
     setLogo("");
     setEmail("");
     setCorporateNo("");
@@ -52,11 +52,11 @@ export default function Register() {
     const emailRegex =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    if (!name) {
+    if (!companyName) {
       return toast.error("Company name is required");
     }
 
-    if (!description) {
+    if (!companyDescription) {
       return toast.error("Company description is required");
     }
 
@@ -100,8 +100,8 @@ export default function Register() {
 
     try {
       const companyDetails: IUser = {
-        name,
-        description,
+        companyName,
+        companyDescription,
         logo,
         email,
         phoneNo,
@@ -164,16 +164,16 @@ export default function Register() {
             labelText="Company Name"
             placeholder="New Energy"
             Icon={LuUser}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
           />
 
           <FormControl
             labelText="Company Description"
             variant="textarea"
             placeholder="Tell us something about your company ..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            value={companyDescription}
+            onChange={(e) => setCompanyDescription(e.target.value)}
           />
 
           {logo ? (

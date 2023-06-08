@@ -15,7 +15,6 @@ export const useAuthStore = create(
     }),
     {
       name: "peercharge:user",
-      storage: createJSONStorage(() => localStorage),
     }
   )
 );
