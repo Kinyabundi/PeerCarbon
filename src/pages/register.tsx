@@ -2,6 +2,7 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormControl, { UploadBtn } from "@/components/forms/FormControl";
 import useUserUtils from "@/hooks/useUserUtils";
 import { IUser } from "@/types/User";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useRef, useState } from "react";
 import toast from "react-hot-toast";
@@ -145,6 +146,9 @@ export default function Register() {
 
   return (
     <section className="bg-white my-8">
+      <Head>
+        <title>Register | PeerCharge</title>
+      </Head>
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
         <form className="w-full max-w-md">
           <div className="flex justify-center mx-auto">

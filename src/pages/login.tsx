@@ -1,6 +1,7 @@
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormControl from "@/components/forms/FormControl";
 import useUserUtils from "@/hooks/useUserUtils";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -110,6 +111,9 @@ export default function Login() {
 
   return (
     <section className="bg-white">
+      <Head>
+        <title>Login</title>
+      </Head>
       <div className="container flex items-center justify-center min-h-screen px-6 mx-auto">
         <form className="w-full max-w-md">
           <div className="flex justify-center mx-auto">

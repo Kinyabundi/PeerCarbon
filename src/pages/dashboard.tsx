@@ -12,6 +12,7 @@ import DashboardAreaChart, {
   DashboardAreaChartProps,
 } from "@/components/AreaChart";
 import DashPieChart from "@/components/DashPieChart";
+import Head from "next/head";
 
 interface DashboardCardProps {
   title: string;
@@ -74,6 +75,9 @@ const Dashboard: NextPageWithLayout = () => {
 
   return (
     <>
+    <Head>
+        <title>Dashboard</title>
+    </Head>
       <div className="px-4 sm:px-6 md:px-8 lg:pl-80 bg-[#f7f9fc] min-h-[100vh] pt-12 pr-3">
         <div className="flex items-baseline justify-between">
           <div>

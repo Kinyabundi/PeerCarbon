@@ -1,5 +1,5 @@
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { IconType } from "react-icons";
 import {
   HiOutlineLogout,
@@ -13,6 +13,7 @@ import { BiSupport } from "react-icons/bi";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import useUserUtils from "@/hooks/useUserUtils";
 import { useRouter } from "next/router";
+import useDidHydrate from "@/hooks/useDidHydrate";
 
 const PLACEHOLDER_IMG =
   "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80";
@@ -57,9 +58,17 @@ const IconText = ({ Icon, text, isLogout = false }: IconTextProps) => {
 };
 
 export default function Navbar() {
-  const { user } = useAuthStore();
+  const { user: userData } = useAuthStore();
   const { logout } = useUserUtils();
   const router = useRouter();
+  const { didHydrate } = useDidHydrate();
+
+  const user = useMemo(() => {
+    if (!didHydrate) return null;
+    if (!userData) return null;
+    return userData;
+  }, [didHydrate, userData]);
+
   return (
     <header className="sticky top-0 inset-x-0 flex flex-wrap sm:justify-start sm:flex-nowrap z-[48] w-full bg-white border-b text-sm py-2.5 sm:py-4 lg:pl-64 ">
       <nav
