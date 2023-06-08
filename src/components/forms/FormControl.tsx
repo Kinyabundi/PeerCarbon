@@ -9,7 +9,8 @@ interface FormControlProps {
   inputType?: string;
   labelText: string;
   rightElement?: JSX.Element;
-  variant?: "textarea" | "input";
+  variant?: "textarea" | "input" | "select";
+  options?: string[];
   required?: boolean;
 }
 
@@ -37,6 +38,7 @@ export default function FormControl({
   labelText,
   rightElement,
   variant = "input",
+  options = [],
   required,
 }: FormControlProps) {
   return (
@@ -69,6 +71,21 @@ export default function FormControl({
             placeholder={placeholder}
             required={required}
           ></textarea>
+        )}
+          {variant === "select" && (
+          <select
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
+            value={value}
+            onChange={onChange}
+            required={required}
+          >
+            <option value="">{placeholder}</option>
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
         )}
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none cursor-pointer z-30">
           {rightElement}

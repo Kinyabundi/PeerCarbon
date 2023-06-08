@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
 import axios, { AxiosRequestConfig } from "axios";
 import Head from "next/head";
+import FormControl from "@/components/forms/FormControl";
 
 const AddVehicle: NextPageWithLayout = () => {
   const [vehicleMakes, setvehicleMakes] = useState<string>("");
@@ -103,128 +104,75 @@ const AddVehicle: NextPageWithLayout = () => {
           </div>
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
-              <label
-                htmlFor="first_name"
-                className="block mb-2 text-md font-medium text-gray-900 "
-              >
-                Vehicle Model:
-              </label>
-              <select
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Honda"
+              <FormControl
+                labelText="Vehicle Model"
                 value={vehicleMakes}
                 onChange={(e) => {
                   setvehicleMakes(e.target.value);
                   fetchvehicleModels();
                 }}
+                variant="input"
+                placeholder="Honda"
                 required
-              >
-                <option value="">Select Model</option>
-                {makes.map((make, i) => (
-                  <option key={i} value={make}>
-                    {make}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
             <div>
-              <label
-                htmlFor="last_name"
-                className="block mb-2 text-md font-medium text-gray-900 "
-              >
-                Type:
-              </label>
-              <select
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="A3"
+              <FormControl
+                labelText="Type"
                 value={type}
                 onChange={(e) => setType(e.target.value)}
+                variant="input"
+                placeholder="A3"
                 required
-              >
-                <option value="">Select Type</option>
-                {models.map((model, i) => (
-                  <option key={i} value={model}>
-                    {model}
-                  </option>
-                ))}
-              </select>
+              />
             </div>
             <div>
-              <label
-                htmlFor="Region"
-                className="block mb-2 text-md font-medium text-gray-900 "
-              >
-                Region:
-              </label>
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Germany"
+              <FormControl
+                labelText="Region"
                 value={region}
                 onChange={(e) => setRegion(e.target.value)}
+                variant="input"
+                placeholder="Germany"
                 required
               />
             </div>
             <div>
-              <label
-                htmlFor="RegistrationNumber"
-                className="block mb-2 text-md font-medium text-gray-900"
-              >
-                Registration Number:
-              </label>
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="KCA 245B"
+              <FormControl
+                labelText="Registration Number"
                 value={registrationNumber}
                 onChange={(e) => setRegistrationNumber(e.target.value)}
+                variant="input"
+                placeholder="KCA 245B"
                 required
               />
             </div>
             <div>
-              <label
-                htmlFor="Capacity"
-                className="block mb-2 text-md font-medium text-gray-900"
-              >
-                Engine Capacity:
-              </label>
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="1200CC"
+              <FormControl
+                labelText="Engine Capacity"
                 value={engineCapacity}
                 onChange={(e) => setEngineCapacity(e.target.value)}
+                variant="input"
+                placeholder="1200CC"
                 required
               />
             </div>
             <div>
-              <label
-                htmlFor="FuelType"
-                className="block mb-2 text-md font-medium text-gray-900"
-              >
-                Fuel Type:
-              </label>
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                placeholder="Diesel"
+              <FormControl
+                labelText="Fuel Type"
                 value={fuelType}
                 onChange={(e) => setFuelType(e.target.value)}
+                variant="input"
+                placeholder="Diesel"
                 required
               />
             </div>
             <div>
-              <label
-                htmlFor="date"
-                className="block mb-2 text-md font-medium text-gray-900 "
-              >
-                Date:
-              </label>
-              <input
-                type="datetime-local"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              <FormControl
+                labelText="Date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
+                variant="input"
+                inputType="datetime-local"
                 required
               />
             </div>
