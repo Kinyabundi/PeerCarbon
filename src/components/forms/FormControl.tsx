@@ -4,7 +4,7 @@ import { IconType } from "react-icons";
 interface FormControlProps {
   Icon?: IconType;
   value?: string | number;
-  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   placeholder?: string;
   inputType?: string;
   labelText: string;
@@ -19,7 +19,9 @@ interface UploadBtnProps {
   btnText?: string;
   isDisabled?: boolean;
   accept?: "image/png" | "image/jpeg" | "image/jpg";
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?:
+  | ((e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void)
+  | ChangeEvent<HTMLSelectElement>;
   pickerRef?: RefObject<HTMLInputElement>;
   value?: string | ArrayBuffer | null;
 }
@@ -72,7 +74,7 @@ export default function FormControl({
             required={required}
           ></textarea>
         )}
-          {variant === "select" && (
+        {variant === "select" && (
           <select
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"
             value={value}
@@ -80,11 +82,12 @@ export default function FormControl({
             required={required}
           >
             <option value="">{placeholder}</option>
-            {options.map((option) => (
+            {Array.isArray(options) && options.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
             ))}
+
           </select>
         )}
         <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none cursor-pointer z-30">

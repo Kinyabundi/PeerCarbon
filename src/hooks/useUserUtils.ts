@@ -69,10 +69,35 @@ const useUserUtils = () => {
     await signOut(firebaseAuth);
   }, []);
 
+  const saveVehicle = useCallback(
+    async (vehicleDetails: IVehicle) => {
+      // Get the currently logged-in user
+      const currentUser = firebaseAuth.currentUser;
+  
+      if (currentUser) {
+        const userId = currentUser.uid;
+        const docRef = doc(
+          firebaseFirestore,
+          FirebaseCollections.USERS,
+          userId,
+          FirebaseCollections.VEHICLES,
+          vehicleDetails.registrationNumber
+        );
+  
+        await setDoc(docRef, vehicleDetails);
+      } else {
+        throw new Error("No user is currently logged in.");
+      }
+    },
+    []
+  );
+  
+
   return {
     createUser,
     signIn,
     logout,
+    saveVehicle,
   };
 };
 

@@ -7,6 +7,9 @@ import axios, { AxiosRequestConfig } from "axios";
 import Head from "next/head";
 import FormControl from "@/components/forms/FormControl";
 
+import useUserUtils from "@/hooks/useUserUtils";
+
+
 const AddVehicle: NextPageWithLayout = () => {
   const [vehicleMakes, setvehicleMakes] = useState<string>("");
   const [makes, setMakes] = useState<string[]>([]);
@@ -18,6 +21,9 @@ const AddVehicle: NextPageWithLayout = () => {
   const [fuelType, setFuelType] = useState("");
   const [date, setDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { saveVehicle } = useUserUtils();
+
 
   const resetForm = () => {
     setvehicleMakes("");
@@ -87,13 +93,51 @@ const AddVehicle: NextPageWithLayout = () => {
     fetchvehicleModels();
   }, [vehicleMakes]);
 
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+  
+  
+  
+    try {
+      const vehicleDetails: IVehicle = {
+        vehicleMakes,
+        type,
+        region,
+        registrationNumber,
+        engineCapacity,
+        fuelType,
+        date,
+      };
+  
+      const vehicleId = await saveVehicle(vehicleDetails);
+  
+      resetForm();
+  
+      toast(`Vehicle saved with ID: ${vehicleId}`, {
+        icon: "👏",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+  
+
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to save vehicle details");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <Head>
         <title>Add Vehicle</title>
       </Head>
       <div className="px-4 sm:px-6 md:px-8 lg:pl-80 bg-[#f7f9fc] min-h-[100vh] pt-12">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <h1 className="text-center mb-2 text-3xl text-gray-900 font-bold">
               Vehicle
@@ -105,24 +149,26 @@ const AddVehicle: NextPageWithLayout = () => {
           <div className="grid gap-6 mb-6 md:grid-cols-2">
             <div>
               <FormControl
-                labelText="Vehicle Model"
+                labelText="Vehicle Make"
                 value={vehicleMakes}
                 onChange={(e) => {
                   setvehicleMakes(e.target.value);
                   fetchvehicleModels();
                 }}
-                variant="input"
-                placeholder="Honda"
+                variant="select"
+                placeholder="Select Vehicle Model"
+                options={makes}
                 required
               />
             </div>
             <div>
               <FormControl
-                labelText="Type"
+                labelText="Vehicle Model"
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                variant="input"
-                placeholder="A3"
+                variant="select"
+                placeholder="Select vehicle model"
+                options={models}
                 required
               />
             </div>
@@ -194,3 +240,5 @@ const AddVehicle: NextPageWithLayout = () => {
 AddVehicle.getLayout = (page) => <MainLayout>{page} </MainLayout>;
 
 export default AddVehicle;
+
+
