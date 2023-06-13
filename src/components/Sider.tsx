@@ -1,33 +1,45 @@
 import { IconType } from "react-icons";
-import { LuPlug } from "react-icons/lu";
+import { LuPlug, LuChevronUp, LuChevronRight } from "react-icons/lu";
 import {
   HiOutlineCurrencyDollar,
   HiOutlineHome,
   HiOutlineStar,
   HiOutlineUser,
 } from "react-icons/hi";
-
+import { Disclosure, Transition } from "@headlessui/react";
 
 interface SideItemProps {
   Icon: IconType;
   text: string;
-  
+  href?: string;
 }
 
-const SideItem = ({ Icon, text}: SideItemProps) => {
- 
+interface DropdownItemProps {
+  text: string;
+  href: string;
+}
 
+const SideItem = ({ Icon, text, href }: SideItemProps) => {
   return (
     <li>
       <a
-        href={`${text.toLowerCase()}`}
-        className='flex items-center gap-x-2.5 py-2 px-2.5 text-sm text-slate-700 rounded-md cursor-pointer hover:text-blue-600'>
+        href={href ? href : text.toLowerCase()}
+        className="flex items-center gap-x-2.5 py-2 px-2.5 text-sm text-slate-700 rounded-md cursor-pointer hover:text-blue-600"
+      >
         <Icon className="w-7 h-7" />
         <span className="text-md font-medium">{text}</span>
-       
       </a>
-     
     </li>
+  );
+};
+
+const DropdownItem = ({ text, href }: DropdownItemProps) => {
+  return (
+    <div className="pl-6 hover:text-blue-800 hover:bg-gray-100 text-md font-medium mr-2 max-w-[200px] w-full py-3 rounded-full cursor-pointer focus:text-blue-600 focus:bg-gray-100">
+      <span>
+        <a href={href}>{text}</a>
+      </span>
+    </div>
   );
 };
 
@@ -52,8 +64,35 @@ export default function Sider() {
       >
         <ul className="space-y-5">
           <SideItem Icon={HiOutlineHome} text="Dashboard" />
-          <SideItem Icon={HiOutlineStar} text="Fleet"
-            />
+          <Disclosure>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between items-center rounded-lg text-left text-sm font-medium text-slate-700 hover:text-blue-600">
+                  <span>
+                    <SideItem Icon={HiOutlineStar} text="Fleet" href="#" />
+                  </span>
+                  <LuChevronUp
+                    className={`${
+                      open ? "-rotate-180 transform" : ""
+                    } h-5 w-5 text-slate-700 hover:text-blue-600 rotate-90 rotate`}
+                  />
+                </Disclosure.Button>
+                <Transition
+                  enter="transition duration-100 ease-out"
+                  enterFrom="transform scale-95 opacity-0"
+                  enterTo="transform scale-100 opacity-100"
+                  leave="transition duration-75 ease-out"
+                  leaveFrom="transform scale-100 opacity-100"
+                  leaveTo="transform scale-95 opacity-0"
+                >
+                  <Disclosure.Panel className="px-4 pb-2 text-sm text-gray-500 space-y-3">
+                    <DropdownItem text="Vehicles" href="/add_vehicle" />
+                    <DropdownItem text="Reports" href="/reports" />
+                  </Disclosure.Panel>
+                </Transition>
+              </>
+            )}
+          </Disclosure>
           <SideItem Icon={HiOutlineUser} text="Users" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Offset" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Subscription" />

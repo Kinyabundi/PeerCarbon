@@ -1,7 +1,7 @@
 import AppServices from "@/AppServices";
 import "@/styles/globals.css";
 import { AppPropsWithLayout } from "@/types/Layout";
-import { Inter, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
 import Head from "next/head";
 import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
