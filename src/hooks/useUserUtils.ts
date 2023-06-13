@@ -11,7 +11,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
-import { doc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc,  getFirestore, collection, query, getDocs } from "firebase/firestore";
 import { getDownloadURL, ref, uploadString } from "firebase/storage";
 import { useCallback } from "react";
 
@@ -91,6 +91,30 @@ const useUserUtils = () => {
     },
     []
   );
+
+  const getUserVehicles = async (userId: any) => {
+    try {
+      const vehiclesRef = collection(
+        firebaseFirestore,
+        FirebaseCollections.USERS,
+        userId,
+        FirebaseCollections.VEHICLES
+      );
+  
+      const querySnapshot = await getDocs(vehiclesRef);
+  
+      const vehicles: any[] = [];
+      querySnapshot.forEach((doc) => {
+        const vehicle = doc.data();
+        vehicles.push(vehicle);
+      });
+  
+      return vehicles;
+    } catch (error) {
+      console.error("Error retrieving user vehicles:", error);
+      throw error;
+    }
+  };
   
 
   return {
@@ -98,6 +122,7 @@ const useUserUtils = () => {
     signIn,
     logout,
     saveVehicle,
+    getUserVehicles,
   };
 };
 
