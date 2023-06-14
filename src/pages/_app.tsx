@@ -11,8 +11,13 @@ const poppins = Poppins({
   subsets: ["latin"],
 });
 
+
+
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  const getLayout = Component.getLayout || ((page) => page);
+
+  const AnyComponent  = Component as any
+
+  const getLayout = AnyComponent?.getLayout || ((page) => page);
   useEffect(() => {
     // @ts-ignore
     import("preline");
@@ -32,7 +37,7 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
           `}
         </style>
       </Head>
-      <AppServices>{getLayout(<Component {...pageProps} />)}</AppServices>
+      <AppServices>{getLayout(<AnyComponent {...pageProps} />)}</AppServices>
       <Toaster />
     </main>
   );
