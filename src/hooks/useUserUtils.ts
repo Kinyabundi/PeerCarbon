@@ -5,6 +5,7 @@ import {
 } from "@/lib/firebase";
 import { FirebaseCollections } from "@/types/Collections";
 import { IUser } from "@/types/User";
+import { IVehicle } from "@/types/Vehicle";
 import { FirebaseError } from "firebase/app";
 import {
   createUserWithEmailAndPassword,

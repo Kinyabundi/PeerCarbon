@@ -8,6 +8,7 @@ import Head from "next/head";
 import FormControl from "@/components/forms/FormControl";
 
 import useUserUtils from "@/hooks/useUserUtils";
+import { IVehicle } from "@/types/Vehicle";
 
 
 const AddVehicle: NextPageWithLayout = () => {
@@ -15,7 +16,7 @@ const AddVehicle: NextPageWithLayout = () => {
   const [makes, setMakes] = useState<string[]>([]);
   const [type, setType] = useState<string>("");
   const [models, setModels] = useState<string[]>([]);
-  const [region, setRegion] = useState("");
+  const [country, setCountry] = useState("");
   const [registrationNumber, setRegistrationNumber] = useState("");
   const [engineCapacity, setEngineCapacity] = useState("");
   const [fuelType, setFuelType] = useState("");
@@ -28,7 +29,7 @@ const AddVehicle: NextPageWithLayout = () => {
   const resetForm = () => {
     setvehicleMakes("");
     setType("");
-    setRegion("");
+    setCountry("");
     setRegistrationNumber("");
     setEngineCapacity("");
     setFuelType("");
@@ -102,18 +103,18 @@ const AddVehicle: NextPageWithLayout = () => {
       const vehicleDetails: IVehicle = {
         vehicleMakes,
         type,
-        region,
+        country,
         registrationNumber,
         engineCapacity,
         fuelType,
         date,
       };
   
-      const vehicleId = await saveVehicle(vehicleDetails);
+      // const vehicleId = await saveVehicle(vehicleDetails);
   
       resetForm();
   
-      toast(`Vehicle saved with ID: ${vehicleId}`, {
+      toast(`Vehicle saved`, {
         icon: "👏",
         style: {
           borderRadius: "10px",
@@ -174,9 +175,9 @@ const AddVehicle: NextPageWithLayout = () => {
             </div>
             <div>
               <FormControl
-                labelText="Region"
-                value={region}
-                onChange={(e) => setRegion(e.target.value)}
+                labelText="Country"
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
                 variant="input"
                 placeholder="Germany"
                 required

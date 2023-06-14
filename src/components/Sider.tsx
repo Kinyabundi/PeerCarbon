@@ -4,9 +4,9 @@ import {
   HiOutlineCurrencyDollar,
   HiOutlineHome,
   HiOutlineStar,
-  HiOutlineUser,
 } from "react-icons/hi";
 import { Disclosure, Transition } from "@headlessui/react";
+import { BsFillCarFrontFill } from "react-icons/bs";
 
 interface SideItemProps {
   Icon: IconType;
@@ -37,7 +37,7 @@ const DropdownItem = ({ text, href }: DropdownItemProps) => {
   return (
     <div className="pl-6 hover:text-blue-800 hover:bg-gray-100 text-md font-medium mr-2 max-w-[200px] w-full py-3 rounded-full cursor-pointer focus:text-blue-600 focus:bg-gray-100">
       <span>
-        <a href={href}>{text}</a>
+        <a href={href ? href : text.toLowerCase()}>{text}</a>
       </span>
     </div>
   );
@@ -93,7 +93,7 @@ export default function Sider() {
               </>
             )}
           </Disclosure>
-          <SideItem Icon={HiOutlineUser} text="Users" />
+          <SideItem Icon={BsFillCarFrontFill} text="Vehicles" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Offset" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Subscription" />
           <SideItem Icon={LuPlug} text="Integration" />

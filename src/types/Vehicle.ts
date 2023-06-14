@@ -1,7 +1,7 @@
-interface IVehicle {
+ export interface IVehicle {
     vehicleMakes: string;
     type: string;
-    region: string;
+    country: string;
     registrationNumber: string;
     engineCapacity: string;
     fuelType: string;

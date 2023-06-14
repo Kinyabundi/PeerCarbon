@@ -152,16 +152,7 @@ const Integration: NextPageWithLayout = () => {
         )}
         {activeTab === 'Manual Data' && (
           <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
-            <ApiCard
-              image='/images/youtube.svg'
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-              text = 'View Integration'
-            />
-            <ApiCard
-              image='/images/twitch.svg'
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-              text = 'View Integration'
-            />
+            
 
           </div>
         )}
