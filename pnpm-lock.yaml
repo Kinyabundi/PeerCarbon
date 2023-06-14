@@ -22,6 +22,9 @@ dependencies:
   axios:
     specifier: ^1.4.0
     version: 1.4.0
+  file-saver:
+    specifier: ^2.0.5
+    version: 2.0.5
   firebase:
     specifier: ^9.22.1
     version: 9.22.1
@@ -1215,6 +1218,10 @@ packages:
     engines: {node: '>=0.8.0'}
     dependencies:
       websocket-driver: 0.7.4
+    dev: false
+
+  /file-saver@2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
     dev: false
 
   /fill-range@7.0.1:

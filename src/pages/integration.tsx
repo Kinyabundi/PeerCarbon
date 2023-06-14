@@ -1,7 +1,8 @@
 import ApiCard from '@/components/cards/ApiCard';
+import { UploadBtn } from '@/components/forms/FormControl';
 import MainLayout from '@/layouts/MainLayout';
 import { NextPageWithLayout } from '@/types/Layout'
-import React from 'react'
+import React, { useRef } from 'react'
 import { useState } from 'react';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
@@ -10,6 +11,21 @@ import { VscDebugStart } from 'react-icons/vsc';
 
 const Integration: NextPageWithLayout = () => {
   const [activeTab, setActiveTab] = useState('All');
+  const [excelFile, setExcelFile] = useState<string>('');
+
+  const excelFileRef = useRef(null);
+
+  const handleExcelPick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // check if there files
+    if (!e?.target?.files?.length) return;
+    const file = e?.target?.files[0];
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setExcelFile(reader.result as string);
+    };
+  };
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
@@ -152,7 +168,32 @@ const Integration: NextPageWithLayout = () => {
         )}
         {activeTab === 'Manual Data' && (
           <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
-            
+            {excelFile ? (
+            <div className="flex items-center mt-6">
+             <p>
+              File Picked
+             </p>
+
+              <div className="ml-4">
+                <UploadBtn
+                  btnText={excelFile ? "Change excelFile" : "Company Logo"}
+                  labelText="Upload Vehicle Details Excel File"
+                  pickerRef={excelFileRef}
+                  onChange={(e) => handleExcelPick(e)}
+                  value={excelFile}
+                  accept="application/xsls"
+                />
+              </div>
+            </div>
+          ) : (
+            <UploadBtn
+              btnText={excelFile ? "Change Excel File" : " Vehicle Details Excel File"}
+              labelText="Upload Vehicle Details Excel File"
+              pickerRef={excelFileRef}
+              onChange={(e) => handleExcelPick(e)}
+              value={excelFile}
+            />
+          )}
 
           </div>
         )}

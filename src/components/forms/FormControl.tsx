@@ -20,7 +20,7 @@ interface UploadBtnProps {
   labelText: string;
   btnText?: string;
   isDisabled?: boolean;
-  accept?: "image/png" | "image/jpeg" | "image/jpg";
+  accept?: "image/png" | "image/jpeg" | "image/jpg" | "application/xsls" | "application/xls";
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   pickerRef?: RefObject<HTMLInputElement>;
   value?: string | ArrayBuffer | null;

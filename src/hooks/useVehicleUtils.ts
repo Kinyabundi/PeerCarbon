@@ -21,7 +21,7 @@ const useVehicleUtils = () => {
       method: "GET",
       url: "https://carbonsutra1.p.rapidapi.com/vehicle_makes",
       headers: {
-        "X-RapidAPI-Key": "538126673fmsh53c90aa3149fc0ap167699jsna536e221fdff",
+        "X-RapidAPI-Key": "72de31fa46msh46063e45e489db7p1f35b0jsna510d69c84f1",
         "X-RapidAPI-Host": "carbonsutra1.p.rapidapi.com",
       },
     } as AxiosRequestConfig;
@@ -48,7 +48,7 @@ const useVehicleUtils = () => {
       method: "GET",
       url: url,
       headers: {
-        "X-RapidAPI-Key": "538126673fmsh53c90aa3149fc0ap167699jsna536e221fdff",
+        "X-RapidAPI-Key": "72de31fa46msh46063e45e489db7p1f35b0jsna510d69c84f1",
         "X-RapidAPI-Host": "carbonsutra1.p.rapidapi.com",
       },
     } as AxiosRequestConfig;
