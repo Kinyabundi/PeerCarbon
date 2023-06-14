@@ -1,15 +1,14 @@
 import MainLayout from "@/layouts/MainLayout";
 import { NextPageWithLayout } from "@/types/Layout";
 import "react-datepicker/dist/react-datepicker.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import axios, { AxiosRequestConfig } from "axios";
 import Head from "next/head";
 import FormControl from "@/components/forms/FormControl";
-
-import useUserUtils from "@/hooks/useUserUtils";
 import { IVehicle } from "@/types/Vehicle";
-
+import { useAuthStore } from "@/hooks/useAuthStore";
+import useDidHydrate from "@/hooks/useDidHydrate";
+import useVehicleUtils from "@/hooks/useVehicleUtils";
 
 const AddVehicle: NextPageWithLayout = () => {
   const [vehicleMakes, setvehicleMakes] = useState<string>("");
@@ -22,9 +21,17 @@ const AddVehicle: NextPageWithLayout = () => {
   const [fuelType, setFuelType] = useState("");
   const [date, setDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { user: userData } = useAuthStore();
+  const { didHydrate } = useDidHydrate();
+  const { fetchVehicleMakesAPI, fetchVehicleModels, saveVehicle } =
+    useVehicleUtils();
 
-  const { saveVehicle } = useUserUtils();
-
+  const user = useMemo(() => {
+    if (didHydrate) {
+      return userData;
+    }
+    return null;
+  }, []);
 
   const resetForm = () => {
     setvehicleMakes("");
@@ -36,69 +43,29 @@ const AddVehicle: NextPageWithLayout = () => {
     setDate("");
   };
 
-  const fetchVehicleMakes = async () => {
-    const options = {
-      method: "GET",
-      url: "https://carbonsutra1.p.rapidapi.com/vehicle_makes",
-      headers: {
-        "X-RapidAPI-Key": "538126673fmsh53c90aa3149fc0ap167699jsna536e221fdff",
-        "X-RapidAPI-Host": "carbonsutra1.p.rapidapi.com",
-      },
-    } as AxiosRequestConfig;
-    try {
-      const response = await axios.request(options);
+  const getVehicleMakes = async () => {
+    const carMakes = await fetchVehicleMakesAPI();
 
-      if (response.status === 200) {
-        setMakes(response.data.data.map((make: any) => make.make));
-      }
-    } catch (error) {
-      console.error(error);
-    }
+    setMakes(carMakes as string[]);
+  };
+
+  const getCarModels = async () => {
+    const carModels = await fetchVehicleModels(vehicleMakes);
+
+    setModels(carModels as string[]);
   };
 
   useEffect(() => {
-    fetchVehicleMakes();
+    getVehicleMakes();
   }, []);
 
-  const fetchvehicleModels = async () => {
-    if (!vehicleMakes) {
-      console.log("no make");
-      setModels([]);
-      return;
-    }
-
-    console.log(vehicleMakes);
-    const url = `https://carbonsutra1.p.rapidapi.com/vehicle_makes/${vehicleMakes}/vehicle_models`;
-
-    const options = {
-      method: "GET",
-      url: url,
-      headers: {
-        "X-RapidAPI-Key": "538126673fmsh53c90aa3149fc0ap167699jsna536e221fdff",
-        "X-RapidAPI-Host": "carbonsutra1.p.rapidapi.com",
-      },
-    } as AxiosRequestConfig;
-    try {
-      const response = await axios.request(options);
-      console.log(response.data.data);
-
-      if (response.status === 200) {
-        setModels(response.data.data.map((model: any) => model.model));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    fetchvehicleModels();
+    getCarModels();
   }, [vehicleMakes]);
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-  
-  
-  
+
     try {
       const vehicleDetails: IVehicle = {
         vehicleMakes,
@@ -108,22 +75,25 @@ const AddVehicle: NextPageWithLayout = () => {
         engineCapacity,
         fuelType,
         date,
+        userId: user?.id as string,
       };
-  
-      // const vehicleId = await saveVehicle(vehicleDetails);
-  
-      resetForm();
-  
-      toast(`Vehicle saved`, {
-        icon: "👏",
-        style: {
-          borderRadius: "10px",
-          background: "#333",
-          color: "#fff",
-        },
-      });
-  
 
+      await saveVehicle(vehicleDetails)
+        .then((_) => {
+          toast(`Vehicle saved`, {
+            icon: "👏",
+            style: {
+              borderRadius: "10px",
+              background: "#333",
+              color: "#fff",
+            },
+          });
+          resetForm();
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error("Failed to save vehicle details");
+        });
     } catch (err) {
       console.error(err);
       toast.error("Failed to save vehicle details");
@@ -154,7 +124,7 @@ const AddVehicle: NextPageWithLayout = () => {
                 value={vehicleMakes}
                 onChange={(e) => {
                   setvehicleMakes(e.target.value);
-                  fetchvehicleModels();
+                  getCarModels();
                 }}
                 variant="select"
                 placeholder="Select Vehicle Model"
@@ -241,5 +211,3 @@ const AddVehicle: NextPageWithLayout = () => {
 AddVehicle.getLayout = (page) => <MainLayout>{page} </MainLayout>;
 
 export default AddVehicle;
-
-

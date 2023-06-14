@@ -1,6 +1,7 @@
 import { firebaseFirestore } from "@/lib/firebase";
 import { FirebaseCollections } from "@/types/Collections";
 import { IUser } from "@/types/User";
+import { IVehicle } from "@/types/Vehicle";
 import {
   CollectionReference,
   DocumentData,
@@ -15,3 +16,4 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 };
 
 export const usersCollection = createCollection<IUser>(FirebaseCollections.USERS);
+export const vehicleCollection = createCollection<IVehicle>(FirebaseCollections.VEHICLES);
