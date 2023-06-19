@@ -80,7 +80,7 @@ const AddVehicle: NextPageWithLayout = () => {
         engineCapacity,
         fuelType,
         date,
-        userId: user?.id as string,
+        userId: userData?.id as string,
       };
 
       await saveVehicle(vehicleDetails)
