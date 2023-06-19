@@ -6,6 +6,7 @@ import useVehicleUtils from "@/hooks/useVehicleUtils";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import useDidHydrate from "@/hooks/useDidHydrate";
 
+
 const VehicleTable: NextPageWithLayout = () => {
   const [vehicles, setVehicles] = useState<IVehicle[]>([]);
   const { didHydrate } = useDidHydrate();
@@ -17,15 +18,20 @@ const VehicleTable: NextPageWithLayout = () => {
     return userData;
   }, [didHydrate, userData]);
 
+  useEffect(() => {
+
   const myVehicles = async () => {
     const cars = await getMyVehicles(user?.id as string);
 
     setVehicles(cars);
   };
 
-  useEffect(() => {
+  
     myVehicles();
   }, [user]);
+
+  
+ 
 
   return (
     <div className="px-4 sm:px-6 md:px-8 lg:pl-80 bg-[#f7f9fc] min-h-[100vh] pt-12">
@@ -77,6 +83,7 @@ const VehicleTable: NextPageWithLayout = () => {
           ))}
         </tbody>
       </table>
+    
     </div>
   );
 };

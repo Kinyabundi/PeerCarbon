@@ -9,7 +9,7 @@ import { IVehicle } from "@/types/Vehicle";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import useDidHydrate from "@/hooks/useDidHydrate";
 import useVehicleUtils from "@/hooks/useVehicleUtils";
-import axios, { AxiosRequestConfig } from "axios";
+
 
 const AddVehicle: NextPageWithLayout = () => {
   const [vehicleMakes, setvehicleMakes] = useState<string>("");
@@ -26,6 +26,7 @@ const AddVehicle: NextPageWithLayout = () => {
   const { didHydrate } = useDidHydrate();
   const { fetchVehicleMakesAPI, fetchVehicleModels, saveVehicle } =
     useVehicleUtils();
+    const [isMakesLoaded, setIsMakesLoaded] = useState(false);
 
   const user = useMemo(() => {
     if (didHydrate) {
@@ -67,6 +68,8 @@ const AddVehicle: NextPageWithLayout = () => {
   useEffect(() => {
     getCarModels();
   }, [vehicleMakes]);
+
+ 
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();

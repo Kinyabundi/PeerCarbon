@@ -5,6 +5,7 @@ import { FirebaseError } from "firebase/app";
 import { addDoc, getDocs, query, where } from "firebase/firestore";
 import { useCallback } from "react";
 
+
 const useVehicleUtils = () => {
   const saveVehicle = useCallback(async (vehicleDetails: IVehicle) => {
     try {
@@ -81,6 +82,10 @@ const useVehicleUtils = () => {
 
     return vehicles;
   }, []);
+
+ 
+
+  
 
   return {
     saveVehicle,

@@ -2,16 +2,35 @@ import ApiCard from '@/components/cards/ApiCard';
 import { UploadBtn } from '@/components/forms/FormControl';
 import MainLayout from '@/layouts/MainLayout';
 import { NextPageWithLayout } from '@/types/Layout'
-import React, { useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useState } from 'react';
 import { AiOutlineShareAlt } from 'react-icons/ai';
 import { BiSearch } from 'react-icons/bi';
 import { VscDebugStart } from 'react-icons/vsc';
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import useVehicleUtils from '@/hooks/useVehicleUtils';
+import { useAuthStore } from '@/hooks/useAuthStore';
+import { IVehicle } from '@/types/Vehicle';
+import useDidHydrate from "@/hooks/useDidHydrate";
+import { BsDownload } from 'react-icons/bs';
+
 
 
 const Integration: NextPageWithLayout = () => {
   const [activeTab, setActiveTab] = useState('All');
   const [excelFile, setExcelFile] = useState<string>('');
+  const { didHydrate } = useDidHydrate();
+  const { getMyVehicles } = useVehicleUtils();
+  const { user: userData } = useAuthStore();
+  const [vehicles, setVehicles] = useState<IVehicle[]>([]);
+
+  const user = useMemo(() => {
+    if (!didHydrate) return null;
+    return userData;
+  }, [didHydrate, userData]);
+
+
 
   const excelFileRef = useRef(null);
 
@@ -25,6 +44,53 @@ const Integration: NextPageWithLayout = () => {
     reader.onloadend = () => {
       setExcelFile(reader.result as string);
     };
+  };
+
+  useEffect(() => {
+
+    const myVehicles = async () => {
+      const cars = await getMyVehicles(user?.id as string);
+
+      setVehicles(cars);
+    };
+
+
+    myVehicles();
+  }, [user]);
+
+
+  const downloadExcelTemplate = async (vehiclesData) => {
+    if (vehicles.length === 0) {
+      return;
+    }
+    //@ts-ignore
+    const formattedData = vehicles.map((vehicle) => ({
+      "Vehicle Make": vehicle.vehicleMakes,
+      "Vehicle Model": vehicle.type,
+      Country: vehicle.country,
+      "Registration Number": vehicle.registrationNumber,
+      "Engine Capacity": vehicle.engineCapacity,
+      "Fuel Type": vehicle.fuelType,
+      Date: vehicle.date,
+      Amount: "",
+      Distance: "",
+      units: "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Vehicles");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const data = new Blob([excelBuffer], {
+      type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(data, "vehicle_details.xlsx");
   };
 
   const handleTabClick = (tab: string) => {
@@ -79,19 +145,19 @@ const Integration: NextPageWithLayout = () => {
                 image='/images/ola.jpeg'
                 title='OLA Africa'
                 description="Connect to OLA Africa's fuel cards accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
               <ApiCard
                 image='/images/hashi.png'
                 title='Hashi Energy'
                 description="Connect to Hashi Energy fuel cards accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
               <ApiCard
                 image='/images/hass.jpeg'
                 title='Hass Energy'
                 description="Connect to Hass Energy fuel cards accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
             </div>
             <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
@@ -99,20 +165,20 @@ const Integration: NextPageWithLayout = () => {
                 image='/images/telematics.png'
                 title='Telematics Africa'
                 description="Connect to Telematics Africa accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
               <ApiCard
                 image='/images/Tramigo.png'
                 title='Tramigo'
                 description="Connect to Tramigo accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
               <ApiCard
                 image='/images/Emdee.png'
                 title='Emdee Telematics'
                 description="Connect to 
             Emdee Telematics accounts through our API endpoints for fueling transaction data"
-            text = ' Request API call'
+                text=' Request API call'
               />
             </div>
             <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
@@ -120,19 +186,19 @@ const Integration: NextPageWithLayout = () => {
                 image='/images/TotalEnergies.png'
                 title='Total Energies'
                 description="Connect to Total fuel cards accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
               <ApiCard
                 image='/images/AFMS.jpeg'
                 title='Africa Fleet MS'
                 description="Connect to OLA Africa's fuel cards accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
               <ApiCard
                 image='/images/Rubis.webp'
                 title='Rubis'
                 description="Connect to Rubis fuel cards accounts through our API endpoints for fueling transaction data"
-                text = ' Request API call'
+                text=' Request API call'
               />
             </div>
           </>
@@ -143,7 +209,7 @@ const Integration: NextPageWithLayout = () => {
               image='/images/privatebeta.svg'
               title='Private Beta'
               description="lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-              text = 'View Integration'
+              text='View Integration'
             />
           </div>
         )}
@@ -152,51 +218,77 @@ const Integration: NextPageWithLayout = () => {
             <ApiCard
               image='/images/facebook.svg'
               description="lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-              text = 'View Integration'
+              text='View Integration'
             />
             <ApiCard
               image='/images/twitter.svg'
               description="lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-              text = 'View Integration'
+              text='View Integration'
             />
             <ApiCard
               image='/images/pinterest.svg'
               description="lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod"
-              text = 'View Integration'
+              text='View Integration'
             />
           </div>
         )}
         {activeTab === 'Manual Data' && (
-          <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
-            {excelFile ? (
-            <div className="flex items-center mt-6">
-             <p>
-              File Picked
-             </p>
 
-              <div className="ml-4">
-                <UploadBtn
-                  btnText={excelFile ? "Change excelFile" : "Company Logo"}
-                  labelText="Upload Vehicle Details Excel File"
-                  pickerRef={excelFileRef}
-                  onChange={(e) => handleExcelPick(e)}
-                  value={excelFile}
-                  accept="application/xsls"
-                />
+          <div className='mt-6 grid grid-cols-1 gap-y-7 md:grid-cols-3 gap-x-0 md:gap-x-6'>
+            <div className="flex items-center">
+              <div className="my-3">
+                <label className="block text-sm font-medium text-gray-900">
+                  Download Vehicle Details Excel Template
+                </label>
+                <button
+                  onClick={downloadExcelTemplate}
+                  type="button"
+                  className="flex items-center px-3 py-3 mx-auto mt-2 text-center bg-white border-2 border-dashed rounded-lg cursor-pointer w-full"
+                >
+                  <BsDownload className='w-6 h-6 text-gray-300' />
+                  <h2 className="mx-3 text-gray-400">Download</h2>
+                </button>
+                {/* <input
+        type="file"
+        className="hidden"
+        ref={pickerRef}
+        accept={accept}
+        onChange={onChange}
+      /> */}
               </div>
+
             </div>
-          ) : (
-            <UploadBtn
-              btnText={excelFile ? "Change Excel File" : " Vehicle Details Excel File"}
-              labelText="Upload Vehicle Details Excel File"
-              pickerRef={excelFileRef}
-              onChange={(e) => handleExcelPick(e)}
-              value={excelFile}
-            />
-          )}
+
+            {excelFile ? (
+              <div className="ml-6">
+                <p>
+                  File Picked
+                </p>
+
+                <div className="ml-4">
+                  <UploadBtn
+                    btnText={excelFile ? "Change excelFile" : "Company Logo"}
+                    labelText="Upload Vehicle Details Excel File"
+                    pickerRef={excelFileRef}
+                    onChange={(e) => handleExcelPick(e)}
+                    value={excelFile}
+                    accept="application/xsls"
+                  />
+                </div>
+              </div>
+            ) : (
+              <UploadBtn
+                btnText={excelFile ? "Change Excel File" : " Vehicle Details Excel File"}
+                labelText="Upload Vehicle Details Excel File"
+                pickerRef={excelFileRef}
+                onChange={(e) => handleExcelPick(e)}
+                value={excelFile}
+              />
+            )}
 
           </div>
         )}
+
       </div>
     </div>
   )
