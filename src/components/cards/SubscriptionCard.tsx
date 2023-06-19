@@ -22,11 +22,11 @@ const SubscriptionCard: FC<SubscriptionCardProps> = ({ title, description, price
         >
             <div className="flex justify-between items-center">
                 <div className='flex justify-center items-center bg-blue-50  mt-6 w-16 h-16 rounded-xl'>
-                    <Icon className='text-[#1476ff]' size={60} />
+                    <Icon className='text-[#005921]' size={60} />
                 </div>
             </div>
             <div className='mt-6'>
-                <h2 className={`text-xl font-bold  ${isHovered ? 'text-[#1476ff]' : 'text-gray-900'}`}>
+                <h2 className={`text-xl font-bold  ${isHovered ? 'text-[#005921]' : 'text-gray-900'}`}>
                     {title}
                 </h2>
                 <div className='mt-4'>

@@ -9,6 +9,7 @@ import { IVehicle } from "@/types/Vehicle";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import useDidHydrate from "@/hooks/useDidHydrate";
 import useVehicleUtils from "@/hooks/useVehicleUtils";
+import axios, { AxiosRequestConfig } from "axios";
 
 const AddVehicle: NextPageWithLayout = () => {
   const [vehicleMakes, setvehicleMakes] = useState<string>("");
@@ -46,8 +47,12 @@ const AddVehicle: NextPageWithLayout = () => {
   const getVehicleMakes = async () => {
     const carMakes = await fetchVehicleMakesAPI();
 
-    setMakes(carMakes as string[]);
+    console.log(carMakes)
+
+    setMakes(carMakes);
   };
+
+ 
 
   const getCarModels = async () => {
     const carModels = await fetchVehicleModels(vehicleMakes);

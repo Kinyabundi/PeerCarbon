@@ -7,7 +7,7 @@ interface ListItemProps {
 
 const ListItem = ({ text }: ListItemProps) => (
     <li className="flex items-start space-x-3">
-    <AiFillCheckCircle className='text-[#1476ff] flex-shrink-0' size={22} />
+    <AiFillCheckCircle className='text-[#005921] flex-shrink-0' size={22} />
     <span className="text-gray-400">
         {text}
     </span>

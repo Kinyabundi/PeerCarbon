@@ -27,10 +27,12 @@ const useVehicleUtils = () => {
     } as AxiosRequestConfig;
     try {
       const response = await axios.request(options);
+      console.log(response.data.data);
 
       if (response.status === 200) {
-        response.data.data.map((make: any) => make.make) as string[];
+       return response.data.data.map((make: any) => make.make) as string[];
       }
+
     } catch (error) {
       console.error(error);
       return [] as string[];
