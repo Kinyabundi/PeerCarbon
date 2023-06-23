@@ -1,3 +1,5 @@
+
+'use client';
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useMemo } from "react";
 import { IconType } from "react-icons";
@@ -12,7 +14,7 @@ import { LuBell, LuInfo } from "react-icons/lu";
 import { BiSupport } from "react-icons/bi";
 import { useAuthStore } from "@/hooks/useAuthStore";
 import useUserUtils from "@/hooks/useUserUtils";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import useDidHydrate from "@/hooks/useDidHydrate";
 
 const PLACEHOLDER_IMG =

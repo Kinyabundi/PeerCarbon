@@ -1,5 +1,6 @@
 import { IconType } from "react-icons";
 import { LuPlug, LuChevronUp, LuChevronRight } from "react-icons/lu";
+import { GiElectric } from "react-icons/gi";
 import {
   HiOutlineCurrencyDollar,
   HiOutlineHome,
@@ -86,14 +87,43 @@ export default function Sider() {
                   leaveTo="transform scale-95 opacity-0"
                 >
                   <Disclosure.Panel className="px-4 pb-2 text-sm text-gray-500 space-y-3">
-                    <DropdownItem text="Vehicles" href="/add_vehicle" />
+                    <DropdownItem text="Add Fleet" href="/add_vehicle" />
                     <DropdownItem text="Reports" href="/reports" />
+                    <DropdownItem text="Vehicles" href="/vehicles" />
                   </Disclosure.Panel>
                 </Transition>
               </>
             )}
           </Disclosure>
-          <SideItem Icon={BsFillCarFrontFill} text="Vehicles" />
+          <Disclosure>
+            {({ open }) => (
+              <>
+                <Disclosure.Button className="flex w-full justify-between items-center rounded-lg text-left text-sm font-medium text-slate-700 hover:text-blue-600">
+                  <span>
+                    <SideItem Icon={GiElectric} text="NetZero" href="#" />
+                  </span>
+                  <LuChevronUp
+                    className={`${
+                      open ? "-rotate-180 transform" : ""
+                    } h-5 w-5 text-slate-700 hover:text-blue-600 rotate-90 rotate`}
+                  />
+                </Disclosure.Button>
+                <Transition
+                  enter="transition duration-100 ease-out"
+                  enterFrom="transform scale-95 opacity-0"
+                  enterTo="transform scale-100 opacity-100"
+                  leave="transition duration-75 ease-out"
+                  leaveFrom="transform scale-100 opacity-100"
+                  leaveTo="transform scale-95 opacity-0"
+                >
+                  <Disclosure.Panel className="px-4 pb-2 text-sm text-gray-500 space-y-3">
+                    <DropdownItem text="Electrification" href="/electrification" />
+                  </Disclosure.Panel>
+                </Transition>
+              </>
+            )}
+          </Disclosure>
+          {/* <SideItem Icon={BsFillCarFrontFill} text="Electrification" /> */}
           <SideItem Icon={HiOutlineCurrencyDollar} text="Offset" />
           <SideItem Icon={HiOutlineCurrencyDollar} text="Subscription" />
           <SideItem Icon={LuPlug} text="Integration" />

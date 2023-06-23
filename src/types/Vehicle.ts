@@ -8,4 +8,7 @@ export interface IVehicle {
   date: string;
   id?: string;
   userId: string;
+  amount?: number;
+  distance?: number;
+  units?: string;
 }

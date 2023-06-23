@@ -40,11 +40,43 @@ const Integration: NextPageWithLayout = () => {
     const file = e?.target?.files[0];
     const reader = new FileReader();
 
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      setExcelFile(reader.result as string);
+
+    reader.onload = async (event) => {
+      const data = new Uint8Array(event.target.result as ArrayBuffer);
+      const workbook = XLSX.read(data, { type: "array" });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const excelData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+      console.log(excelData);
+
+      // data starts from row 9 (index 8)
+      for(let i = 8; i < excelData.length; i++) {
+        const row = excelData[i];
+        const registrationNumber = row[3];
+        const Distance = row[8];
+        const units = row[9];
+        const Amount = row[7];
+        
+       console.log(registrationNumber, Distance, units, Amount);
+
+        const vehicle = vehicles.find((vehicle) => vehicle.registrationNumber === registrationNumber);
+        if(vehicle) {
+          console.log(vehicle.userId);
+          vehicle.distance = Distance;
+          vehicle.units = units;
+          vehicle.amount = Amount;
+        }
+      }
+      setExcelFile('');
     };
+    reader.readAsArrayBuffer(file);
   };
+
+  //   reader.readAsDataURL(file);
+  //   reader.onloadend = () => {
+  //     setExcelFile(reader.result as string);
+  //   };
+  // };
 
   useEffect(() => {
 
